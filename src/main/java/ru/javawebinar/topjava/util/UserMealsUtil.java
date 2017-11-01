@@ -36,11 +36,7 @@ public class UserMealsUtil {
         mealList.forEach(meal -> {
             LocalDate mealDate = meal.getDateTime().toLocalDate();
             int caloriesPerDate = caloriesPerDateMap.getOrDefault(mealDate, 0) + meal.getCalories();
-            if (!caloriesPerDateMap.containsKey(mealDate)) {
-                caloriesPerDateMap.put(mealDate, meal.getCalories());
-            } else {
-                caloriesPerDateMap.put(mealDate, caloriesPerDate);
-            }
+            caloriesPerDateMap.put(mealDate, caloriesPerDate);
         });
 
         return mealList.stream().
