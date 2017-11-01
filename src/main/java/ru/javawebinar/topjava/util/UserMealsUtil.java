@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.util;
 
+import jdk.internal.util.xml.impl.Pair;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExceed;
 
@@ -32,12 +33,8 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        Map<LocalDate, Integer> caloriesPerDateMap = new HashMap<>();
-        mealList.forEach(meal -> {
-            LocalDate mealDate = meal.getDateTime().toLocalDate();
-            int caloriesPerDate = caloriesPerDateMap.getOrDefault(mealDate, 0) + meal.getCalories();
-            caloriesPerDateMap.put(mealDate, caloriesPerDate);
-        });
+        Map<LocalDate, Integer> caloriesPerDateMap = mealList.stream()
+                .collect(Collectors.toMap(p -> p.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
 
         return mealList.stream().
                 filter(meal -> {
